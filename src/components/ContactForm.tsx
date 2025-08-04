@@ -1,279 +1,233 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import { CalendarDays, Mail, Send, User } from "lucide-react";
 
-const contactSchema = z.object({
-  name: z.string().min(2, "Naam moet minimaal 2 karakters bevatten"),
-  email: z.string().email("Voer een geldig emailadres in"),
-  subject: z.string().min(5, "Onderwerp moet minimaal 5 karakters bevatten"),
-  dateOfBirth: z.string().min(1, "Geboortedatum is verplicht"),
-  message: z.string().min(10, "Bericht moet minimaal 10 karakters bevatten"),
-});
-
-type ContactFormData = z.infer<typeof contactSchema>;
-
 const ContactForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
+    const [submitted, setSubmitted] = useState(false);
+    const [ageError, setAgeError] = useState("");
+    const formRef = useRef<HTMLFormElement>(null);
 
-  const form = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      subject: "",
-      dateOfBirth: "",
-      message: "",
-    },
-  });
-
-  const calculateAge = (birthDate: string): number => {
-    const today = new Date();
-    const birth = new Date(birthDate);
-    let age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-      age--;
+    function calculateAge(dateString: string) {
+        const today = new Date();
+        const birthDate = new Date(dateString);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
     }
-    
-    return age;
-  };
 
-  const onSubmit = async (data: ContactFormData) => {
-    setIsSubmitting(true);
-    
-    try {
-      const age = calculateAge(data.dateOfBirth);
-      
-      if (age < 18) {
-        toast({
-          variant: "destructive",
-          title: "Leeftijdsbeperking",
-          description: "Je moet minimaal 18 jaar oud zijn om een bericht te verzenden.",
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      toast({
-        title: "Bericht verzonden!",
-        description: "Bedankt voor je bericht. We nemen zo snel mogelijk contact met je op.",
-      });
-      
-      form.reset();
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Er is iets misgegaan",
-        description: "Probeer het later opnieuw of neem telefonisch contact op.",
-      });
-    } finally {
-      setIsSubmitting(false);
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault(); // Prevent default form submission
+        setAgeError("");
+        const formData = new FormData(e.currentTarget);
+        const dob = formData.get("dateOfBirth") as string;
+        if (!dob || calculateAge(dob) < 18) {
+            setAgeError("Je moet minimaal 18 jaar oud zijn om dit formulier te verzenden.");
+            return false;
+        }
+        // Simulate form submission (replace with actual API call in production)
+        setTimeout(() => setSubmitted(true), 1000);
+        return true;
     }
-  };
 
-  return (
-    <section id="contact" className="py-20 bg-gradient-to-b from-muted/30 to-background">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12 animate-fade-in-up">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Neem contact op
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Heeft u vragen of wilt u een offerte aanvragen? 
-              Vul het formulier in en wij nemen contact met u op.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Info */}
-            <div className="space-y-8 animate-slide-in-left">
-              <Card className="border-0 shadow-glow hover:shadow-elegant transition-all duration-300 bg-gradient-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-glow hover:scale-110 transition-transform duration-300">
-                      <Mail className="w-5 h-5 text-white" />
+    return (
+        <section id="contact" className="py-24 bg-gradient-to-b from-traffic-blue/10 to-background font-sans">
+            <div className="container mx-auto px-6">
+                <div className="max-w-5xl mx-auto">
+                    <div className="text-center mb-16 animate-fade-in-up [animation-delay:100ms]">
+                        <h2 className="text-5xl font-extrabold text-traffic-blue mb-6 tracking-tight">
+                            Neem contact op
+                        </h2>
+                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                            Heeft u vragen of wilt u een offerte aanvragen? Vul het formulier in en wij nemen zo snel mogelijk contact met u op.
+                        </p>
                     </div>
-                    Direct contact
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="group hover:bg-muted/50 p-3 rounded-lg transition-all duration-300">
-                    <h4 className="font-semibold text-foreground mb-2">Telefoon</h4>
-                    <p className="text-muted-foreground group-hover:text-primary transition-colors duration-300">+31 6 17038632</p>
-                  </div>
-                  <div className="group hover:bg-muted/50 p-3 rounded-lg transition-all duration-300">
-                    <h4 className="font-semibold text-foreground mb-2">Email</h4>
-                    <p className="text-muted-foreground group-hover:text-primary transition-colors duration-300">info@uranuservices.nl</p>
-                  </div>
-                  <div className="group hover:bg-muted/50 p-3 rounded-lg transition-all duration-300">
-                    <h4 className="font-semibold text-foreground mb-2">Bereikbaarheid</h4>
-                    <p className="text-muted-foreground group-hover:text-primary transition-colors duration-300">24/7, inclusief weekenden</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-0 shadow-glow bg-gradient-accent text-white hover:scale-105 transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="animate-float">Waarom kiezen voor Uranu Services?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 text-white/90">
-                    <li className="flex items-center gap-2 hover:translate-x-2 transition-transform duration-300">
-                      <span className="w-2 h-2 bg-white rounded-full"></span>
-                      Gecertificeerde verkeersregelaars
-                    </li>
-                    <li className="flex items-center gap-2 hover:translate-x-2 transition-transform duration-300">
-                      <span className="w-2 h-2 bg-white rounded-full"></span>
-                      24/7 bereikbaar voor noodgevallen
-                    </li>
-                    <li className="flex items-center gap-2 hover:translate-x-2 transition-transform duration-300">
-                      <span className="w-2 h-2 bg-white rounded-full"></span>
-                      Maatwerk oplossingen
-                    </li>
-                    <li className="flex items-center gap-2 hover:translate-x-2 transition-transform duration-300">
-                      <span className="w-2 h-2 bg-white rounded-full"></span>
-                      Vaste aanspreekpunt
-                    </li>
-                    <li className="flex items-center gap-2 hover:translate-x-2 transition-transform duration-300">
-                      <span className="w-2 h-2 bg-white rounded-full"></span>
-                      Reserveteam stand-by
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        {/* Contact Info */}
+                        <div className="space-y-10 animate-slide-in-left [animation-delay:200ms]">
+                            <Card className="border-0 shadow-elegant bg-gradient-to-br from-white to-traffic-blue/5 hover:shadow-glow transition-all duration-500">
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-4 text-2xl text-traffic-blue">
+                                        <div className="w-12 h-12 bg-traffic-blue rounded-xl flex items-center justify-center shadow-glow hover:scale-110 transition-transform duration-300">
+                                            <Mail className="w-6 h-6 text-white" aria-hidden="true" />
+                                        </div>
+                                        Direct contact
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-6">
+                                    <div className="group hover:bg-traffic-blue/10 p-4 rounded-xl transition-all duration-300">
+                                        <h4 className="font-semibold text-foreground mb-2">Telefoon</h4>
+                                        <p className="text-muted-foreground group-hover:text-traffic-blue transition-colors duration-300">
+                                            <a href="tel:+31617038632" className="hover:underline">+31 6 17038632</a>
+                                        </p>
+                                    </div>
+                                    <div className="group hover:bg-traffic-blue/10 p-4 rounded-xl transition-all duration-300">
+                                        <h4 className="font-semibold text-foreground mb-2">Email</h4>
+                                        <p className="text-muted-foreground group-hover:text-traffic-blue transition-colors duration-300">
+                                            <a href="mailto:info@uranuservices.nl" className="hover:underline">info@uranuservices.nl</a>
+                                        </p>
+                                    </div>
+                                    <div className="group hover:bg-traffic-blue/10 p-4 rounded-xl transition-all duration-300">
+                                        <h4 className="font-semibold text-foreground mb-2">Bereikbaarheid</h4>
+                                        <p className="text-muted-foreground group-hover:text-traffic-blue transition-colors duration-300">24/7, inclusief weekenden</p>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            <Card className="border-0 shadow-elegant bg-gradient-to-br from-traffic-orange to-traffic-orange/80 text-white hover:scale-105 transition-all duration-500">
+                                <CardHeader>
+                                    <CardTitle className="text-2xl animate-float">Waarom kiezen voor Uranu Services?</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <ul className="space-y-4 text-white/90">
+                                        <li className="flex items-center gap-3 hover:translate-x-3 transition-transform duration-300">
+                                            <span className="w-3 h-3 bg-white rounded-full" aria-hidden="true"></span>
+                                            Gecertificeerde verkeersregelaars
+                                        </li>
+                                        <li className="flex items-center gap-3 hover:translate-x-3 transition-transform duration-300">
+                                            <span className="w-3 h-3 bg-white rounded-full" aria-hidden="true"></span>
+                                            24/7 bereikbaar voor noodgevallen
+                                        </li>
+                                        <li className="flex items-center gap-3 hover:translate-x-3 transition-transform duration-300">
+                                            <span className="w-3 h-3 bg-white rounded-full" aria-hidden="true"></span>
+                                            Maatwerk oplossingen
+                                        </li>
+                                        <li className="flex items-center gap-3 hover:translate-x-3 transition-transform duration-300">
+                                            <span className="w-3 h-3 bg-white rounded-full" aria-hidden="true"></span>
+                                            Vaste aanspreekpunt
+                                        </li>
+                                        <li className="flex items-center gap-3 hover:translate-x-3 transition-transform duration-300">
+                                            <span className="w-3 h-3 bg-white rounded-full" aria-hidden="true"></span>
+                                            Reserveteam stand-by
+                                        </li>
+                                    </ul>
+                                </CardContent>
+                            </Card>
+                        </div>
+                        {/* Contact Form */}
+                        <Card className="border-0 shadow-elegant bg-gradient-to-br from-white to-traffic-blue/5 hover:shadow-glow transition-all duration-500 animate-slide-in-right [animation-delay:300ms]">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-4 text-2xl text-traffic-blue">
+                                    <div className="w-12 h-12 bg-traffic-orange rounded-xl flex items-center justify-center shadow-glow hover:scale-110 transition-transform duration-300">
+                                        <Send className="w-6 h-6 text-white" aria-hidden="true" />
+                                    </div>
+                                    Stuur ons een bericht
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                {submitted ? (
+                                    <div className="text-center py-12 animate-scale-in">
+                                        <h3 className="text-3xl font-bold text-traffic-blue mb-4">Bedankt!</h3>
+                                        <p className="text-lg text-muted-foreground">Uw bericht is succesvol verzonden. We nemen zo snel mogelijk contact op.</p>
+                                        <Button
+                                            variant="outline"
+                                            size="lg"
+                                            className="mt-6 bg-transparent border-traffic-blue text-traffic-blue hover:bg-traffic-blue hover:text-white font-bold transition-all duration-300"
+                                            onClick={() => setSubmitted(false)}
+                                        >
+                                            Nieuw bericht
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <form
+                                        ref={formRef}
+                                        action="https://submitform.com/your-endpoint"
+                                        method="POST"
+                                        className="space-y-8"
+                                        autoComplete="off"
+                                        onSubmit={handleSubmit}
+                                        aria-describedby={ageError ? "form-error" : undefined}
+                                    >
+                                        <input type="text" name="honeypot" className="hidden" tabIndex={-1} autoComplete="off" />
+                                        <input type="hidden" name="_honeypot" value="on" />
+                                        <input type="hidden" name="_subject" value="Nieuw contactformulier van Uranu Services" />
+                                        <div>
+                                            <label htmlFor="name" className="flex items-center gap-2 font-semibold mb-2 text-traffic-blue">
+                                                <User className="w-5 h-5" aria-hidden="true" />
+                                                Naam
+                                            </label>
+                                            <Input
+                                                id="name"
+                                                name="name"
+                                                required
+                                                minLength={2}
+                                                placeholder="Uw volledige naam"
+                                                autoComplete="off"
+                                                className="border-traffic-blue/30 focus:ring-traffic-blue focus:border-traffic-blue transition-all duration-300"
+                                                aria-required="true"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="email" className="flex items-center gap-2 font-semibold mb-2 text-traffic-blue">
+                                                <Mail className="w-5 h-5" aria-hidden="true" />
+                                                Email
+                                            </label>
+                                            <Input
+                                                id="email"
+                                                name="email"
+                                                type="email"
+                                                required
+                                                placeholder="uw.email@voorbeeld.nl"
+                                                autoComplete="off"
+                                                className="border-traffic-blue/30 focus:ring-traffic-blue focus:border-traffic-blue transition-all duration-300"
+                                                aria-required="true"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="dateOfBirth" className="flex items-center gap-2 font-semibold mb-2 text-traffic-blue">
+                                                <CalendarDays className="w-5 h-5" aria-hidden="true" />
+                                                Geboortedatum
+                                            </label>
+                                            <Input
+                                                id="dateOfBirth"
+                                                name="dateOfBirth"
+                                                type="date"
+                                                required
+                                                className="border-traffic-blue/30 focus:ring-traffic-blue focus:border-traffic-blue transition-all duration-300"
+                                                aria-required="true"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="message" className="font-semibold mb-2 text-traffic-blue">
+                                                Bericht
+                                            </label>
+                                            <Textarea
+                                                id="message"
+                                                name="message"
+                                                required
+                                                minLength={10}
+                                                placeholder="Beschrijf uw verzoek in detail..."
+                                                className="min-h-[140px] border-traffic-blue/30 focus:ring-traffic-blue focus:border-traffic-blue transition-all duration-300"
+                                                aria-required="true"
+                                            />
+                                        </div>
+                                        {ageError && (
+                                            <div id="form-error" className="text-traffic-red text-center font-semibold animate-fade-in">
+                                                {ageError}
+                                            </div>
+                                        )}
+                                        <Button
+                                            type="submit"
+                                            variant="secondary"
+                                            size="lg"
+                                            className="w-full bg-traffic-orange hover:bg-traffic-orange/90 text-white font-bold shadow-glow hover:shadow-elegant transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-traffic-blue"
+                                            aria-label="Verstuur contactformulier"
+                                        >
+                                            Verstuur bericht
+                                        </Button>
+                                    </form>
+                                )}
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
             </div>
-
-            {/* Contact Form */}
-            <Card className="border-0 shadow-glow hover:shadow-elegant transition-all duration-300 bg-gradient-card animate-slide-in-right">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center shadow-glow hover:scale-110 transition-transform duration-300">
-                    <Send className="w-5 h-5 text-white" />
-                  </div>
-                  Stuur ons een bericht
-                </CardTitle>
-                <CardDescription>
-                  Alle velden zijn verplicht. Je moet minimaal 18 jaar zijn.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="flex items-center gap-2">
-                            <User className="w-4 h-4" />
-                            Naam
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Uw volledige naam" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="flex items-center gap-2">
-                            <Mail className="w-4 h-4" />
-                            Email
-                          </FormLabel>
-                          <FormControl>
-                            <Input type="email" placeholder="uw.email@voorbeeld.nl" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="dateOfBirth"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="flex items-center gap-2">
-                            <CalendarDays className="w-4 h-4" />
-                            Geboortedatum
-                          </FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="subject"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Onderwerp</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Waar gaat uw bericht over?" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Bericht</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              placeholder="Beschrijf uw verzoek in detail..." 
-                              className="min-h-[120px]"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <Button 
-                      type="submit" 
-                      variant="contact" 
-                      size="lg" 
-                      className="w-full"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? "Bezig met verzenden..." : "Verstuur bericht"}
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+        </section>
+    );
 };
 
 export default ContactForm;

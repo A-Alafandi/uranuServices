@@ -1,68 +1,88 @@
-import { Button } from "@/components/ui/button";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { useState } from "react";
+import { Menu, X, TrafficCone } from "lucide-react";
+
+const NAV_LINKS = [
+    { label: "Vacatures", href: "#vacatures" },
+    { label: "Opleiding", href: "#opleiding" },
+    { label: "Diensten", href: "#diensten" },
+    { label: "Over ons", href: "#over-ons" },
+];
 
 const Header = () => {
-  return (
-    <>
-      {/* Top bar */}
-      <div className="bg-primary text-primary-foreground py-2 px-4 animate-slide-in-left">
-        <div className="container mx-auto flex justify-between items-center text-sm">
-          <div className="flex items-center gap-6">
-            <a href="tel:+31617038632" className="flex items-center gap-2 hover:text-primary-glow transition-all duration-300 hover:scale-105">
-              <Phone className="w-4 h-4" />
-              Bel +31 6 17038632
-            </a>
-            <a href="mailto:info@uranuservices.nl" className="flex items-center gap-2 hover:text-primary-glow transition-all duration-300 hover:scale-105">
-              <Mail className="w-4 h-4" />
-              info@uranuservices.nl
-            </a>
-          </div>
-          <div className="hidden md:block animate-fade-in [animation-delay:300ms]">
-            Opzoek naar verkeersregelaars? Begin hier.
-          </div>
-        </div>
-      </div>
+    const [open, setOpen] = useState(false);
 
-      {/* Main header */}
-      <header className="bg-card/80 backdrop-blur-md shadow-elegant sticky top-0 z-50 border-b border-border/50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 animate-slide-in-left">
-              <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow hover:scale-110 transition-transform duration-300">
-                <span className="text-white font-bold text-xl">U</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-foreground">
-                  Uranu Services <span className="text-primary hover:text-primary-glow transition-colors duration-300">VKR</span>
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Verkeersregelaar • Training • Certificering
-                </p>
-              </div>
+    return (
+        <header className="fixed top-0 left-0 w-full z-50 bg-white/95 dark:bg-traffic-blue/95 shadow-elegant backdrop-blur-lg transition-all duration-300 font-sans">
+            <div className="container mx-auto flex items-center justify-between py-4 px-6 md:px-0">
+                {/* Brand */}
+                <a href="/" className="flex items-center gap-3 group">
+                    <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-traffic-orange shadow-glow transition-transform duration-300 group-hover:scale-105 animate-float">
+                        <TrafficCone className="w-7 h-7 text-white" />
+                    </div>
+                    <span className="font-bold text-2xl text-traffic-blue tracking-wide group-hover:text-traffic-orange transition-colors duration-300">
+            Uranu Services
+          </span>
+                </a>
+
+                {/* Desktop Nav */}
+                <nav className="hidden md:flex items-center gap-8 ml-10">
+                    {NAV_LINKS.map((link) => (
+                        <a
+                            key={link.href}
+                            href={link.href}
+                            className="text-lg font-medium text-traffic-blue hover:text-traffic-orange transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-traffic-orange"
+                        >
+                            {link.label}
+                        </a>
+                    ))}
+                    <a
+                        href="#contact"
+                        className="ml-6 px-6 py-2 rounded-xl bg-traffic-orange text-white font-bold shadow-glow hover:bg-traffic-orange/90 hover:shadow-elegant transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-traffic-blue"
+                    >
+                        Vraag offerte aan
+                    </a>
+                </nav>
+
+                {/* Mobile Burger */}
+                <button
+                    className="md:hidden p-2 rounded-xl hover:bg-traffic-blue/10 transition"
+                    onClick={() => setOpen(!open)}
+                    aria-label={open ? "Menu sluiten" : "Menu openen"}
+                >
+                    {open ? (
+                        <X className="w-8 h-8 text-traffic-blue" />
+                    ) : (
+                        <Menu className="w-8 h-8 text-traffic-blue" />
+                    )}
+                </button>
             </div>
-            
-            <nav className="hidden md:flex items-center gap-6 animate-slide-in-right">
-              <a href="#diensten" className="text-foreground hover:text-primary transition-all duration-300 relative group">
-                <span>Diensten</span>
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </a>
-              <a href="#over-ons" className="text-foreground hover:text-primary transition-all duration-300 relative group">
-                <span>Over Ons</span>
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </a>
-              <a href="#contact" className="text-foreground hover:text-primary transition-all duration-300 relative group">
-                <span>Contact</span>
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </a>
-              <Button variant="hero" size="lg" className="hover:scale-105 hover:shadow-glow transition-all duration-300">
-                Vraag Offerte
-              </Button>
-            </nav>
-          </div>
-        </div>
-      </header>
-    </>
-  );
+
+            {/* Mobile Nav */}
+            {open && (
+                <nav className="absolute top-full left-0 w-full bg-white dark:bg-traffic-blue/95 border-t border-traffic-blue/20 shadow-elegant md:hidden animate-fade-in-up">
+                    <div className="flex flex-col items-center py-6 gap-6">
+                        {NAV_LINKS.map((link) => (
+                            <a
+                                key={link.href}
+                                href={link.href}
+                                className="text-lg font-medium text-traffic-blue hover:text-traffic-orange transition focus:outline-none focus:ring-2 focus:ring-traffic-orange"
+                                onClick={() => setOpen(false)}
+                            >
+                                {link.label}
+                            </a>
+                        ))}
+                        <a
+                            href="#contact"
+                            className="mt-4 px-6 py-2 rounded-xl bg-traffic-orange text-white font-bold shadow-glow hover:bg-traffic-orange/90 transition focus:outline-none focus:ring-2 focus:ring-traffic-blue"
+                            onClick={() => setOpen(false)}
+                        >
+                            Vraag offerte aan
+                        </a>
+                    </div>
+                </nav>
+            )}
+        </header>
+    );
 };
 
 export default Header;
