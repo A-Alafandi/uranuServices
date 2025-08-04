@@ -49,12 +49,12 @@ const features = [
 
 const Features = () => {
   return (
-    <section id="over-ons" className="py-20 bg-card">
+    <section id="over-ons" className="py-20 bg-gradient-to-b from-background to-muted/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 animate-fade-in-up">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Een gecertificeerde en ervaren verkeersregelaar huren 
-            <span className="text-primary"> bij ons bedrijf</span>
+            <span className="text-primary animate-float"> bij ons bedrijf</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
             Het huren van verkeersregelaars kan het verschil maken tussen chaos en geordende 
@@ -63,7 +63,7 @@ const Features = () => {
           </p>
         </div>
 
-        <div className="mb-16">
+        <div className="mb-16 animate-fade-in [animation-delay:200ms]">
           <h3 className="text-3xl font-bold text-center text-foreground mb-4">
             Ontzorgen is wat we doen
           </h3>
@@ -78,13 +78,14 @@ const Features = () => {
             return (
               <Card 
                 key={index} 
-                className="hover:shadow-card-hover transition-all duration-300 hover:scale-105 border-0 shadow-md h-full"
+                className="group hover:shadow-glow transition-all duration-500 hover:scale-105 hover:-translate-y-2 border-0 shadow-card h-full bg-gradient-card backdrop-blur-sm animate-scale-in"
+                style={{ animationDelay: `${index * 150}ms` }}
               >
                 <CardHeader className="text-center pb-4">
-                  <div className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4`}>
+                  <div className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow`}>
                     <IconComponent className="w-8 h-8 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-foreground leading-snug">
+                  <CardTitle className="text-lg text-foreground leading-snug group-hover:text-primary transition-colors duration-300">
                     {feature.title}
                   </CardTitle>
                 </CardHeader>

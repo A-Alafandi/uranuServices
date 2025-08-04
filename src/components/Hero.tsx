@@ -3,32 +3,33 @@ import { Phone, Mail, MapPin } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-[80vh] bg-gradient-hero text-white overflow-hidden">
-      <div className="absolute inset-0 bg-black/20"></div>
-      <div className="relative container mx-auto px-4 py-20 flex items-center min-h-[80vh]">
+    <section className="relative min-h-[90vh] bg-gradient-hero text-white overflow-hidden">
+      <div className="absolute inset-0 bg-black/10"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
+      <div className="relative container mx-auto px-4 py-20 flex items-center min-h-[90vh]">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight animate-fade-in-up">
             Verkeersveiligheid<br />
-            <span className="text-primary-glow">begint bij ons</span>
+            <span className="text-primary-glow animate-float">begint bij ons</span>
           </h1>
           
-          <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-3xl mx-auto leading-relaxed animate-fade-in [animation-delay:200ms]">
             Ervaren en gecertificeerde verkeersregelaars van Uranu Services, 
             uw partners in veilig en efficiënt verkeersbeheer door heel Nederland.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button variant="secondary" size="xl" className="shadow-lg">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in [animation-delay:400ms]">
+            <Button variant="secondary" size="xl" className="shadow-glow hover:shadow-elegant transition-all duration-300 hover:scale-105">
               Ik zoek verkeersregelaars
             </Button>
-            <Button variant="accent" size="xl" className="shadow-lg">
+            <Button variant="accent" size="xl" className="shadow-glow hover:shadow-elegant transition-all duration-300 hover:scale-105">
               Vraag Offerte
             </Button>
           </div>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white/80">
-            <div className="flex items-center gap-2">
-              <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white/80 animate-slide-in-left [animation-delay:600ms]">
+            <div className="flex items-center gap-2 group hover:scale-105 transition-all duration-300">
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/30 transition-all duration-300">
                 <Phone className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
@@ -37,8 +38,8 @@ const Hero = () => {
               </div>
             </div>
             
-            <div className="flex items-center gap-2">
-              <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center">
+            <div className="flex items-center gap-2 group hover:scale-105 transition-all duration-300">
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/30 transition-all duration-300">
                 <Mail className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">

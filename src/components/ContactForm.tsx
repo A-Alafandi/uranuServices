@@ -85,10 +85,10 @@ const ContactForm = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-muted/50">
+    <section id="contact" className="py-20 bg-gradient-to-b from-muted/30 to-background">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 animate-fade-in-up">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               Neem contact op
             </h2>
@@ -100,53 +100,68 @@ const ContactForm = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Info */}
-            <div className="space-y-8">
-              <Card className="border-0 shadow-card-hover">
+            <div className="space-y-8 animate-slide-in-left">
+              <Card className="border-0 shadow-glow hover:shadow-elegant transition-all duration-300 bg-gradient-card">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-glow hover:scale-110 transition-transform duration-300">
                       <Mail className="w-5 h-5 text-white" />
                     </div>
                     Direct contact
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div>
+                  <div className="group hover:bg-muted/50 p-3 rounded-lg transition-all duration-300">
                     <h4 className="font-semibold text-foreground mb-2">Telefoon</h4>
-                    <p className="text-muted-foreground">+31 6 17038632</p>
+                    <p className="text-muted-foreground group-hover:text-primary transition-colors duration-300">+31 6 17038632</p>
                   </div>
-                  <div>
+                  <div className="group hover:bg-muted/50 p-3 rounded-lg transition-all duration-300">
                     <h4 className="font-semibold text-foreground mb-2">Email</h4>
-                    <p className="text-muted-foreground">info@uranuservices.nl</p>
+                    <p className="text-muted-foreground group-hover:text-primary transition-colors duration-300">info@uranuservices.nl</p>
                   </div>
-                  <div>
+                  <div className="group hover:bg-muted/50 p-3 rounded-lg transition-all duration-300">
                     <h4 className="font-semibold text-foreground mb-2">Bereikbaarheid</h4>
-                    <p className="text-muted-foreground">24/7, inclusief weekenden</p>
+                    <p className="text-muted-foreground group-hover:text-primary transition-colors duration-300">24/7, inclusief weekenden</p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border-0 shadow-card-hover bg-gradient-accent text-white">
+              <Card className="border-0 shadow-glow bg-gradient-accent text-white hover:scale-105 transition-all duration-300">
                 <CardHeader>
-                  <CardTitle>Waarom kiezen voor Uranu Services?</CardTitle>
+                  <CardTitle className="animate-float">Waarom kiezen voor Uranu Services?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 text-white/90">
-                    <li>✓ Gecertificeerde verkeersregelaars</li>
-                    <li>✓ 24/7 bereikbaar voor noodgevallen</li>
-                    <li>✓ Maatwerk oplossingen</li>
-                    <li>✓ Vaste aanspreekpunt</li>
-                    <li>✓ Reserveteam stand-by</li>
+                  <ul className="space-y-3 text-white/90">
+                    <li className="flex items-center gap-2 hover:translate-x-2 transition-transform duration-300">
+                      <span className="w-2 h-2 bg-white rounded-full"></span>
+                      Gecertificeerde verkeersregelaars
+                    </li>
+                    <li className="flex items-center gap-2 hover:translate-x-2 transition-transform duration-300">
+                      <span className="w-2 h-2 bg-white rounded-full"></span>
+                      24/7 bereikbaar voor noodgevallen
+                    </li>
+                    <li className="flex items-center gap-2 hover:translate-x-2 transition-transform duration-300">
+                      <span className="w-2 h-2 bg-white rounded-full"></span>
+                      Maatwerk oplossingen
+                    </li>
+                    <li className="flex items-center gap-2 hover:translate-x-2 transition-transform duration-300">
+                      <span className="w-2 h-2 bg-white rounded-full"></span>
+                      Vaste aanspreekpunt
+                    </li>
+                    <li className="flex items-center gap-2 hover:translate-x-2 transition-transform duration-300">
+                      <span className="w-2 h-2 bg-white rounded-full"></span>
+                      Reserveteam stand-by
+                    </li>
                   </ul>
                 </CardContent>
               </Card>
             </div>
 
             {/* Contact Form */}
-            <Card className="border-0 shadow-card-hover">
+            <Card className="border-0 shadow-glow hover:shadow-elegant transition-all duration-300 bg-gradient-card animate-slide-in-right">
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center shadow-glow hover:scale-110 transition-transform duration-300">
                     <Send className="w-5 h-5 text-white" />
                   </div>
                   Stuur ons een bericht
