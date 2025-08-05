@@ -32,6 +32,11 @@
     animation: logo-spin infinite 20s linear;
   }
 }
+@layer base {
+    * {
+        @apply border border-border;
+    }
+}
 
 .card {
   padding: 2em;

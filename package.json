@@ -1,33 +1,56 @@
 {
   "name": "uranu-services",
   "version": "1.0.0",
-  "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.tsx",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@radix-ui/react-tooltip": "^1.0.6",
-    "@tanstack/react-query": "^5.0.0",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tooltip": "^1.2.7",
+    "@tanstack/react-query": "^5.84.1",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.536.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.14.2",
-    "sonner": "^1.0.0",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.22.3",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
-    "@vitejs/plugin-react": "^4.0.3",
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.27",
-    "tailwindcss": "^3.3.3",
-    "typescript": "^5.0.2",
-    "vite": "^5.0.0"
-  }
+    "@types/node": "^24.2.0",
+    "@types/tailwindcss": "^3.0.11",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.9.2",
+    "vite": "^7.0.6"
+  },
+  "description": "**URL**: https://lovable.dev/projects/c3f0d90f-0368-4a24-b66b-27cb7b230752",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A-Alafandi/c3f0d90f-0368-4a24-b66b-27cb7b230752.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/A-Alafandi/c3f0d90f-0368-4a24-b66b-27cb7b230752/issues"
+  },
+  "homepage": "https://github.com/A-Alafandi/c3f0d90f-0368-4a24-b66b-27cb7b230752#readme"
 }

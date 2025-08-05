@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, TrafficCone } from "lucide-react";
+import { Menu, X, HardHat } from "lucide-react";
 
 const NAV_LINKS = [
     { label: "Vacatures", href: "#vacatures" },
@@ -17,7 +17,7 @@ const Header = () => {
                 {/* Brand */}
                 <a href="/" className="flex items-center gap-3 group">
                     <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-traffic-orange shadow-glow transition-transform duration-300 group-hover:scale-105 animate-float">
-                        <TrafficCone className="w-7 h-7 text-white" />
+                        <HardHat className="w-7 h-7 text-white" />
                     </div>
                     <span className="font-bold text-2xl text-traffic-blue tracking-wide group-hover:text-traffic-orange transition-colors duration-300">
             Uranu Services

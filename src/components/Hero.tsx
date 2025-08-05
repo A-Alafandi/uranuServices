@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Phone, Mail } from "lucide-react";
-import HeroImage from "../../public/assets/img/HeroImage.jpg"; // Replace with your actual image path
+
 const Hero = () => {
     return (
         <section
             className="relative min-h-[90vh] flex items-center justify-center overflow-hidden"
             style={{
-                backgroundImage: `url('../../public/assets/img/HeroImage.jpg')`, // Replace with your background image path
+                backgroundImage: `url('src/assets/img/HeroImage.jpg')`, // Replace with your background image path
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',

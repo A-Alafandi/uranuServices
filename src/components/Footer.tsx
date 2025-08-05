@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, Clock } from "lucide-react";
+import {Phone, Mail, Clock, HardHat} from "lucide-react";
 
 const Footer = () => {
     return (
@@ -9,8 +9,8 @@ const Footer = () => {
                     {/* Company Info */}
                     <div>
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="w-14 h-14 bg-traffic-orange rounded-xl flex items-center justify-center shadow-glow">
-                                <span className="text-3xl font-extrabold text-white">U</span>
+                            <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-traffic-orange shadow-glow transition-transform duration-300 group-hover:scale-105 animate-float">
+                                <HardHat className="w-7 h-7 text-white" />
                             </div>
                             <div>
                                 <h3 className="text-2xl font-bold text-white">Uranu Services VKR</h3>
