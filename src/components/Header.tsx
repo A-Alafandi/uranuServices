@@ -1,86 +1,177 @@
-import { useState } from "react";
-import { Menu, X, HardHat } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Menu, X, HardHat, Sun, Moon } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
-const NAV_LINKS = [
-    { label: "Vacatures", href: "#vacatures" },
-    { label: "Opleiding", href: "#opleiding" },
-    { label: "Diensten", href: "#diensten" },
-    { label: "Over ons", href: "#over-ons" },
+type NavItem = { label: string; to?: string; hash?: string };
+
+// Added an explicit "Home" entry at the top
+const NAV: NavItem[] = [
+    { label: "Home", to: "/" },
+    { label: "Over ons", hash: "over-ons" },
+    { label: "Diensten", hash: "diensten" },
+    { label: "Contact", hash: "contact" },
+    { label: "Vacatures", to: "/Vacatures" },
+    { label: "Opleiding", to: "/opleiding" },
 ];
 
 const Header = () => {
-    const [open, setOpen] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [isDark, setIsDark] = useState(false);
+    const location = useLocation();
+
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 30);
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
+    useEffect(() => {
+        const saved = localStorage.getItem("theme");
+        if (saved) {
+            const dark = saved === "dark";
+            setIsDark(dark);
+            document.documentElement.classList.toggle("dark", dark);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            setIsDark(true);
+            document.documentElement.classList.add("dark");
+        }
+    }, []);
+
+    const toggleTheme = () => {
+        const next = !isDark;
+        setIsDark(next);
+        document.documentElement.classList.toggle("dark", next);
+        localStorage.setItem("theme", next ? "dark" : "light");
+    };
+
+    const linkClass =
+        `transition-colors duration-300 text-sm md:text-base font-medium ` +
+        (scrolled ? "text-foreground hover:text-primary" : "text-white/85 hover:text-white");
+
+    const onAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+        if (location.pathname === "/") {
+            e.preventDefault();
+            const target = document.querySelector<HTMLElement>(`#${hash}`);
+            target?.scrollIntoView({ behavior: "smooth" });
+            setMobileOpen(false);
+        }
+    };
+
+    const anchorHref = (hash: string) => (location.pathname === "/" ? `#${hash}` : `/#${hash}`);
 
     return (
-        <header className="fixed top-0 left-0 w-full z-50 bg-white/95 dark:bg-traffic-blue/95 shadow-elegant backdrop-blur-lg transition-all duration-300 font-sans">
-            <div className="container mx-auto flex items-center justify-between py-4 px-6 md:px-0">
-                {/* Brand */}
-                <a href="/" className="flex items-center gap-3 group">
-                    <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-traffic-orange shadow-glow transition-transform duration-300 group-hover:scale-105 animate-float">
-                        <HardHat className="w-7 h-7 text-white" />
-                    </div>
-                    <span className="font-bold text-2xl text-traffic-blue tracking-wide group-hover:text-traffic-orange transition-colors duration-300">
-            Uranu Services
-          </span>
-                </a>
+        <header
+            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+                scrolled ? "bg-background/95 backdrop-blur-md shadow-lg border-b border-border"
+                    : "bg-traffic-dark/80 backdrop-blur-md border-b border-white/10"
+            }`}
+        >
+            <div className="container py-3">
+                <div className="flex items-center justify-between">
+                    {/* Logo links to home */}
+                    <Link to="/" className="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md">
+                        <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-traffic-orange shadow-[0_0_24px_4px_hsl(var(--traffic-orange)/0.25)]">
+                            <HardHat className="w-5 h-5 text-white" />
+                        </div>
+                        <span className={`text-xl md:text-2xl font-extrabold ${scrolled ? "text-foreground" : "text-white"}`}>
+              Uranu Services
+            </span>
+                    </Link>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-8 ml-10">
-                    {NAV_LINKS.map((link) => (
-                        <a
-                            key={link.href}
-                            href={link.href}
-                            className="text-lg font-medium text-traffic-blue hover:text-traffic-orange transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-traffic-orange"
+                    {/* Desktop nav with explicit Home item */}
+                    <nav className="hidden md:flex items-center gap-6">
+                        {NAV.map((item) =>
+                            item.to ? (
+                                <Link
+                                    key={item.label}
+                                    to={item.to}
+                                    className={linkClass}
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    {item.label}
+                                </Link>
+                            ) : (
+                                <a
+                                    key={item.label}
+                                    href={anchorHref(item.hash!)}
+                                    onClick={(e) => onAnchorClick(e, item.hash!)}
+                                    className={linkClass}
+                                >
+                                    {item.label}
+                                </a>
+                            )
+                        )}
+                        <Button
+                            size="sm"
+                            className="ml-2 bg-traffic-orange text-white hover:bg-traffic-orange/90 min-w-[120px] shadow-[0_0_24px_4px_hsl(var(--traffic-orange)/0.25)]"
+                            asChild
                         >
-                            {link.label}
-                        </a>
-                    ))}
-                    <a
-                        href="#contact"
-                        className="ml-6 px-6 py-2 rounded-xl bg-traffic-orange text-white font-bold shadow-glow hover:bg-traffic-orange/90 hover:shadow-elegant transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-traffic-blue"
+                            <a href={anchorHref("contact")} onClick={(e) => onAnchorClick(e, "contact")}>Offerte Aanvragen</a>
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={toggleTheme}
+                            aria-label={isDark ? "Schakel naar licht thema" : "Schakel naar donker thema"}
+                            className={scrolled ? "text-foreground" : "text-white"}
+                        >
+                            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                        </Button>
+                    </nav>
+
+                    {/* Mobile toggle */}
+                    <button
+                        className={`md:hidden p-2 rounded-md ${scrolled ? "text-foreground" : "text-white"}`}
+                        onClick={() => setMobileOpen((v) => !v)}
+                        aria-label="Menu openen/sluiten"
+                        aria-expanded={mobileOpen}
+                        aria-controls="mobile-menu"
                     >
-                        Vraag offerte aan
-                    </a>
-                </nav>
+                        {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                    </button>
+                </div>
 
-                {/* Mobile Burger */}
-                <button
-                    className="md:hidden p-2 rounded-xl hover:bg-traffic-blue/10 transition"
-                    onClick={() => setOpen(!open)}
-                    aria-label={open ? "Menu sluiten" : "Menu openen"}
-                >
-                    {open ? (
-                        <X className="w-8 h-8 text-traffic-blue" />
-                    ) : (
-                        <Menu className="w-8 h-8 text-traffic-blue" />
-                    )}
-                </button>
-            </div>
-
-            {/* Mobile Nav */}
-            {open && (
-                <nav className="absolute top-full left-0 w-full bg-white dark:bg-traffic-blue/95 border-t border-traffic-blue/20 shadow-elegant md:hidden animate-fade-in-up">
-                    <div className="flex flex-col items-center py-6 gap-6">
-                        {NAV_LINKS.map((link) => (
-                            <a
-                                key={link.href}
-                                href={link.href}
-                                className="text-lg font-medium text-traffic-blue hover:text-traffic-orange transition focus:outline-none focus:ring-2 focus:ring-traffic-orange"
-                                onClick={() => setOpen(false)}
-                            >
-                                {link.label}
-                            </a>
-                        ))}
-                        <a
-                            href="#contact"
-                            className="mt-4 px-6 py-2 rounded-xl bg-traffic-orange text-white font-bold shadow-glow hover:bg-traffic-orange/90 transition focus:outline-none focus:ring-2 focus:ring-traffic-blue"
-                            onClick={() => setOpen(false)}
+                {/* Mobile nav includes explicit Home too */}
+                {mobileOpen && (
+                    <nav id="mobile-menu" className="md:hidden mt-4 pb-4 space-y-4 animate-fade-in-up">
+                        {NAV.map((item) =>
+                            item.to ? (
+                                <Link
+                                    key={item.label}
+                                    to={item.to}
+                                    className={`${linkClass} block py-2`}
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    {item.label}
+                                </Link>
+                            ) : (
+                                <a
+                                    key={item.label}
+                                    href={anchorHref(item.hash!)}
+                                    onClick={(e) => onAnchorClick(e, item.hash!)}
+                                    className={`${linkClass} block py-2`}
+                                >
+                                    {item.label}
+                                </a>
+                            )
+                        )}
+                        <Button className="w-full mt-2 bg-traffic-orange text-white hover:bg-traffic-orange/90" asChild>
+                            <a href={anchorHref("contact")} onClick={(e) => onAnchorClick(e, "contact")}>Offerte aanvragen</a>
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={toggleTheme}
+                            aria-label={isDark ? "Schakel naar licht thema" : "Schakel naar donker thema"}
+                            className={`w-full flex justify-center ${scrolled ? "text-foreground" : "text-white"}`}
                         >
-                            Vraag offerte aan
-                        </a>
-                    </div>
-                </nav>
-            )}
+                            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                        </Button>
+                    </nav>
+                )}
+            </div>
         </header>
     );
 };

@@ -1,94 +1,110 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-    GraduationCap,
-    Phone,
-    Shield,
-    Settings,
-    Clock,
-    CheckCircle
-} from "lucide-react";
+import { GraduationCap, Phone, Shield, Settings, Clock, CheckCircle } from "lucide-react";
+import type { ComponentType } from "react";
 
-const features = [
+/**
+ * Tip (future-proofing):
+ * - In de toekomst wil je foto's i.p.v. iconen tonen.
+ *   Je kunt dan per item `imageSrc` invullen; zolang die ontbreekt valt het terug op `icon`.
+ */
+type FeatureItem = {
+    title: string;
+    description: string;
+    icon?: ComponentType<{ className?: string }>;
+    imageSrc?: string; // voor later: echte foto tonen
+    color: string;
+};
+
+const features: FeatureItem[] = [
     {
-        title: "In-company opgeleide en gecertificeerde personeel",
-        description: "Al onze verkeersregelaars zijn intern opgeleid en volledig gecertificeerd volgens de nieuwste veiligheidsnormen.",
+        title: "Gecertificeerd & vakbekwaam",
+        description:
+            "Onze verkeersregelaars zijn intern getraind, VCA-georiënteerd en werken volgens de meest recente landelijke richtlijnen.",
         icon: GraduationCap,
-        color: "bg-traffic-blue"
+        color: "bg-traffic-orange",
     },
     {
-        title: "Korte communicatielijnen met één vast aanspreekpunt",
-        description: "Directe communicatie met uw vaste contactpersoon voor snelle en efficiënte service.",
+        title: "Één vast aanspreekpunt",
+        description:
+            "Korte lijnen, snelle schakeling. U heeft altijd een vaste contactpersoon die uw project en planning kent.",
         icon: Phone,
-        color: "bg-traffic-orange"
+        color: "bg-traffic-dark",
     },
     {
-        title: "Reserveteam altijd stand-by voor calamiteiten",
-        description: "Ons reserveteam staat 24/7 klaar voor noodsituaties en onverwachte uitval.",
+        title: "Reserveteam paraat",
+        description:
+            "Onvoorziene uitval of een piekmoment? Ons reserveteam staat 24/7 stand-by voor directe inzet.",
         icon: Shield,
-        color: "bg-traffic-red"
+        color: "bg-traffic-dark",
     },
     {
-        title: "Maatwerk oplossingen voor uw project",
-        description: "Elke situatie is uniek. Wij bieden oplossingen op maat voor uw specifieke behoeften.",
+        title: "Oplossingen op maat",
+        description:
+            "Elke locatie en situatie is anders. We stemmen bezetting, looproutes en bebording af op uw risico-analyse.",
         icon: Settings,
-        color: "bg-traffic-blue"
+        color: "bg-traffic-orange",
     },
     {
-        title: "Altijd bereikbaar, 24/7, inclusief weekenden",
-        description: "Onze service stopt nooit. Wij zijn altijd bereikbaar, ook in het weekend en tijdens feestdagen.",
+        title: "Altijd bereikbaar",
+        description:
+            "Dag en nacht inzetbaar—ook in het weekend en tijdens feestdagen. Storingsdienst en spoedlijn beschikbaar.",
         icon: Clock,
-        color: "bg-traffic-orange"
+        color: "bg-traffic-dark",
     },
     {
-        title: "Ontzorgen is wat we doen",
-        description: "Wij nemen de zorgen over verkeersveiligheid volledig uit uw handen, zodat u zich kunt focussen op uw kernactiviteiten.",
+        title: "Complete ontzorging",
+        description:
+            "Van intake en vergunningcheck tot uitvoer en nazorg: wij nemen de regie uit handen en leveren meetbaar resultaat.",
         icon: CheckCircle,
-        color: "bg-traffic-red"
-    }
+        color: "bg-traffic-dark",
+    },
 ];
 
 const Features = () => {
     return (
-        <section id="over-ons" className="py-24 bg-gradient-to-b from-traffic-blue/10 to-background font-sans">
-            <div className="container mx-auto px-6">
-                <div className="text-center mb-16 animate-fade-in-up [animation-delay:100ms]">
-                    <h2 className="text-5xl font-extrabold text-traffic-blue mb-6 tracking-tight">
-                        Gecertificeerde verkeersregelaars huren
-                        <span className="text-traffic-orange animate-float"> bij Uranu Services</span>
+        <section id="over-ons" className="py-16 sm:py-20 bg-white dark:bg-traffic-dark/90">
+            <div className="container">
+                <div className="text-center mb-12 max-w-3xl mx-auto motion-safe:animate-fade-in-up">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-traffic-dark dark:text-white mb-6">
+                        Waarom kiezen voor Uranu Services?
                     </h2>
-                    <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-                        Het huren van verkeersregelaars zorgt voor veilige en geordende verkeersstromen, zelfs in de meest uitdagende situaties. Bij Uranu Services bieden wij ervaren professionals, afgestemd op uw behoeften.
+                    <p className="text-base sm:text-lg text-muted-foreground dark:text-white/80">
+                        Met gecertificeerde verkeersregelaars, heldere communicatie en flexibele inzet zorgen wij voor veilige en
+                        doorstromende verkeerssituaties—op elk moment, op elke locatie.
                     </p>
                 </div>
-                <div className="mb-16 animate-fade-in [animation-delay:300ms]">
-                    <h3 className="text-3xl font-bold text-center text-traffic-blue mb-4">
-                        Uw partner in verkeersveiligheid
-                    </h3>
-                    <h4 className="text-2xl font-semibold text-center text-traffic-orange mb-12">
-                        Waarom kiezen voor Uranu Services?
-                    </h4>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {features.map((feature, index) => {
                         const IconComponent = feature.icon;
                         return (
                             <Card
-                                key={index}
-                                className="group border-0 rounded-xl shadow-elegant bg-gradient-to-br from-white to-traffic-blue/5 hover:shadow-glow hover:-translate-y-3 transition-all duration-500 animate-scale-in"
-                                style={{ animationDelay: `${index * 150}ms` }}
+                                key={feature.title}
+                                className="group border border-[hsl(var(--border))] hover:border-traffic-orange/50 transition-all duration-300 hover:shadow-glow motion-safe:animate-fade-in"
+                                style={{ animationDelay: `${index * 100}ms` }}
                             >
-                                <CardHeader className="text-center pb-4">
-                                    <div className={`w-14 h-14 ${feature.color} rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow`}>
-                                        <IconComponent className="w-7 h-7 text-white" />
+                                <CardHeader className="items-center">
+                                    <div
+                                        className={`w-14 h-14 ${feature.color} rounded-lg flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 dark:bg-opacity-90 overflow-hidden`}
+                                    >
+                                        {feature.imageSrc ? (
+                                            <img
+                                                src={feature.imageSrc}
+                                                alt={feature.title}
+                                                className="w-full h-full object-cover"
+                                                loading="lazy"
+                                                decoding="async"
+                                            />
+                                        ) : IconComponent ? (
+                                            <IconComponent className="w-6 h-6 text-white" aria-hidden="true" />
+                                        ) : null}
                                     </div>
-                                    <CardTitle className="text-xl text-traffic-blue group-hover:text-traffic-orange transition-colors duration-300">
+                                    <CardTitle className="text-lg sm:text-xl text-center text-traffic-dark dark:text-white">
                                         {feature.title}
                                     </CardTitle>
                                 </CardHeader>
-                                <CardContent>
-                                    <p className="text-muted-foreground text-center leading-relaxed">
-                                        {feature.description}
-                                    </p>
+                                <CardContent className="text-center text-muted-foreground dark:text-white/80 text-sm sm:text-base">
+                                    {feature.description}
                                 </CardContent>
                             </Card>
                         );
